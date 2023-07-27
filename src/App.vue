@@ -21,9 +21,17 @@ const addTodo = () => {
     content: input_content.value,
     category: input_category.value,
     done: false,
-    createdAt: new Date.getTime(),
+    createdAt: new Date().getTime(),
   });
 };
+
+watch(
+  todos,
+  (newVal) => {
+    localStorage.setItem("todos", JSON.stringify(newVal));
+  },
+  { deep: true }
+);
 
 watch(name, (newVal) => {
   localStorage.setItem("name", newVal);
@@ -31,6 +39,7 @@ watch(name, (newVal) => {
 
 onMounted(() => {
   name.value = localStorage.getItem("name") || "";
+  todos.value = JSON.parse(localStorage.getItem("todos") || []);
 });
 </script>
 
@@ -79,5 +88,7 @@ onMounted(() => {
         <input type="submit" value="Add todo" />
       </form>
     </section>
+
+    {{ todos_asc }}
   </main>
 </template>
